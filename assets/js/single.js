@@ -1,5 +1,23 @@
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
+var repoNameEl = document.querySelector("#repo-name");
+
+var getRepoName = function () {
+    //use var to hold info from search value located in docuement's location
+    var queryString = document.location.search;
+    //use var to hold repo name after/before '='
+    var repoName = queryString.split("=")[1];
+
+    //add error handling through if else statement
+    if(repoName) {
+        //pass repoName into getRepoIssues function and call it
+        repoNameEl.textContent = repoName;
+        getRepoIssues(repoName);
+    } else {
+        //if no repo given, nav back to main page
+        document.location.replace("./index.html");
+    }
+};
 
 var getRepoIssues = function(repo) {
     //use var to hold apiURl that requests data from github
@@ -19,14 +37,11 @@ var getRepoIssues = function(repo) {
                 }
             });
         } else {
-            //request error
-            alert("There was a problem with your request :(")
+            //request error, redirect to main page
+            document.location.replace("./index.html");
         }
     });
 };
-
-//call function
-getRepoIssues('facebook/react');
 
 var displayIssues = function(issues) {
     //if repo has no open issues display this:
@@ -78,3 +93,5 @@ var displayWarning = function (repo) {
     //append to warning container
    limitWarningEl.appendChild(linkEl);
 };
+
+getRepoName();
